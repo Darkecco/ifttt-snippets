@@ -31,7 +31,8 @@ myDate[0] = (myMonths.indexOf(myDate[0].substr(0, 3).toLowerCase()) + 1).toStrin
 myDate[0] = Pad(myDate[0]);
 myDate[1] = myDate[1].replace(",", "");
 myDate[1] = Pad(myDate[1]);
-myDateTime[0] = myDate.join(" "); // You can change this delimiter to what you need in the date ouput, i.e. "-" or "/".
+let myDateCorrected = [myDate[1], myDate[0], myDate[2]];
+myDateTime[0] = myDateCorrected.join(" "); // You can change this delimiter to what you need in the date ouput, i.e. "-" or "/".
 
 let my12Hour = myDateTime[1].substr(-2, 2);
 let myHour = parseInt(myDateTime[1].substr(0, 2));
