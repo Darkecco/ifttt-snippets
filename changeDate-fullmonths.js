@@ -11,23 +11,41 @@ function Pad(str: string) { // This function pads single digit numbers with a pr
   }
 }
 
-let myMonths = {
-  "jan": "Januari",
-  "feb": "Februari",
-  "mar": "Maart",
-  "apr": "April",
-  "may": "Mei",
-  "jun": "Juni",
-  "jul": "Juli",
-  "aug": "Augustus",
-  "sep": "September",
-  "oct": "Oktober",
-  "nov": "November",
-  "dec": "December"
-};
+let myMonths = [
+  "jan",
+  "feb",
+  "mar",
+  "apr",
+  "may",
+  "jun",
+  "jul",
+  "aug",
+  "sep",
+  "oct",
+  "nov",
+  "dec"
+];
+
+let myTranslations = [
+  "Januari",
+  "Februari",
+  "Maart",
+  "April",
+  "Mei",
+  "Juni",
+  "Juli",
+  "Augustus",
+  "September",
+  "Oktober",
+  "November",
+  "December"
+];
 
 let myDate = myDateTime[0].split(" ");
-myDate[0] = myMonths[myDate[0].substr(0, 3).toLowerCase()];
+
+// Get the first three letters of the month, change it to an index and get the Dutch translation out of it.
+myDate[0] = myTranslations[myMonths.indexOf(myDate[0].substr(0, 3).toLowerCase())];
+
 myDate[1] = myDate[1].replace(",", "");
 myDate[1] = Pad(myDate[1]);
 let myDateCorrected = [myDate[1], myDate[0], myDate[2]];
