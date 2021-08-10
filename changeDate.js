@@ -51,7 +51,7 @@ if (myHour != 12) {
 let myHourStr = myHour.toString();
 myHourStr = Pad(myHourStr);
 
-myDateTime[1] = myHour + ":" + myMinute;
+myDateTime[1] = myHourStr + ":" + myMinute;
 let myOutput = myDateTime.join(" ")
 
 IfNotifications.sendNotification.setMessage("Button pressed @ " + myOutput)
