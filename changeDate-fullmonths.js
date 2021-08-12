@@ -1,74 +1,62 @@
-let myInput = DoButton.doButtonNewCommandCommon.OccurredAt; // Change the DoButton Trigger to the one used in the IFTTT recipe.
+let myInput = "inputdate" // change to actual input from Trigger.
 let myDateTime = myInput.split("at").map(function(item) {
-  return item.trim();
+	return item.trim();
 });
 
-function Pad(str: string) { // This function pads single digit numbers with a preceeding 0.
-  if (str.length < 2) {
-    return "0" + str;
-  } else {
-    return str;
-  }
+// This function adds a leading zero.
+function pad(str: string) {
+	if (str.length < 2) {
+		return "0" + str;
+	} else {
+		return str;
+	}
 }
 
-let myMonths = [
-  "jan",
-  "feb",
-  "mar",
-  "apr",
-  "may",
-  "jun",
-  "jul",
-  "aug",
-  "sep",
-  "oct",
-  "nov",
-  "dec"
-];
+// This function converts 12 hour time to 24 hour time.
+function convert24(hour: number, amPM: string){
+	if (hour == 12){
+		hour = 0;
+	}
+	if (amPM == "PM"){
+		hour += 12;
+	}
+	return hour;
+}
 
-let myTranslations = [
-  "Januari",
-  "Februari",
-  "Maart",
-  "April",
-  "Mei",
-  "Juni",
-  "Juli",
-  "Augustus",
-  "September",
-  "Oktober",
-  "November",
-  "December"
-];
+// Indexed object with month translations.
+const myMonthList: Record<string, string> = {
+	"jan": "Januari",
+	"feb": "Februari",
+	"mar": "Maart",
+	"apr": "April",
+	"may": "Mei",
+	"jun": "Juni",
+	"jul": "Juli",
+	"aug": "Augustus",
+	"sep": "September",
+	"oct": "Oktober",
+	"nov": "November",
+	"dec": "December"
+}
 
 let myDate = myDateTime[0].split(" ");
 
-// Get the first three letters of the month, change it to an index and get the Dutch translation out of it.
-myDate[0] = myTranslations[myMonths.indexOf(myDate[0].substr(0, 3).toLowerCase())];
+let myDay = myDate[1].replace(",", "");
+let myMonth = myMonthList[myDate[0].substr(0, 3).toLowerCase()]; // Translate month.
+let myYear = myDate[2];
 
-myDate[1] = myDate[1].replace(",", "");
-myDate[1] = Pad(myDate[1]);
-let myDateCorrected = [myDate[1], myDate[0], myDate[2]];
-myDateTime[0] = myDateCorrected.join(" "); // You can change this delimiter to what you need in the date ouput, i.e. "-" or "/".
+myDay = pad(myDay);
+myMonth = pad(myMonth);
 
-let my12Hour = myDateTime[1].substr(-2, 2);
+let myNewDate = [myDay, myMonth, myYear].join(" "); // You can choose the delimiter in the join function.
+
+
+let myAMPM = myDateTime[1].substr(-2, 2);
 let myHour = parseInt(myDateTime[1].substr(0, 2));
 let myMinute = myDateTime[1].substr(3, 2);
 
-if (myHour != 12) {
-  if (my12Hour == "PM") {
-    myHour = (myHour + 12) % 24;
-  }
-} else {
-  if (my12Hour == "AM") {
-    myHour = 0;
-  }
-}
+myHour = convert24(myHour, myAMPM);
+let myHourStr = pad(myHour.toString());
+let myNewTime = [myHourStr, myMinute].join(":");
 
-let myHourStr = myHour.toString();
-myHourStr = Pad(myHourStr);
-
-myDateTime[1] = myHourStr + ":" + myMinute;
-let myOutput = myDateTime.join(" ")
-
-IfNotifications.sendNotification.setMessage("Button pressed @ " + myOutput)
+let myOutput = [myNewDate, myNewTime].join(" "); // This is the output that can be used in the Action.
